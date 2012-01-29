@@ -1,0 +1,19 @@
+
+# psmsl_netcdf
+
+Produces netcdf files containing monthly mean sea levels from
+tne Revised Local Reference (RLR) stations of the Permanent
+Service for Mean Sea Level, Liverpool, UK.
+
+## Usage
+
+java -jar psmsl_netcdf-0.0.1-SNAPSHOT-standalone.jar user pass dbstring
+
+where dbstring is of the form @dbname:port:sid
+
+## License
+
+Copyright (C) 2012 Simon Holgate 
+
+Distributed under the Eclipse Public License, the same as 
+Clojure.
