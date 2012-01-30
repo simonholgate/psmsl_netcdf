@@ -20,6 +20,19 @@
   (:require [clojure.java.io :as io])
   (:gen-class))
 
+;; Set up the entities for tables and relationships of interest
+;; Tables we are interested in:
+(defentity monthly)
+(defentity country)
+(defentity address)
+
+;; Sets up relationship - each station is only referred to once in monthly
+(defentity station
+;; Makes sure that station.id gets joined to monthly.id
+  (has-one monthly {:fk :id})
+;; Makes sure that station.country gets joined to country.id
+  (has-one country {:fk :id}))
+    
 (defn make-single-coord [val]
   "Returns a single value as a co-ordinate"
     (ArrayFloat/factory 
@@ -39,7 +52,6 @@
 (defn make-shorts [list]
   "Returns list of shorts from list of non-shorts"
   (map #(short %) list))
-
 
 (defn days-elapsed [date]
   "Returns the days elapsed since 0000-01-01T00:00:00Z until the given date"
@@ -86,23 +98,29 @@
    results map"
   (make-short-array (make-shorts (make-seq res :rlrdata))))
 
-(defn set-entities []
-  "Sets up tables and relationships of interest"
-  ;; Tables we are interested in:
-  (defentity monthly)
-  (defentity country)
-  (defentity address)
-  ;; Sets up relationship - each station is only referred to once in monthly
-  (defentity station
-    ;; Makes sure that station.id gets joined to monthly.id
-    (has-one monthly {:fk :id})
-    ;; Makes sure that station.country gets joined to country.id
-    (has-one country {:fk :id})
-    ;; Transform documentation clob
-    ;;(transform #(-> %
-    ;;                (update-in [:documentation] clob-to-string)))
-    ))
+(defn write-data [data metadata datafile]
+  (let [;; Create the coordinate data
+        lat (make-single-coord ((metadata 0) :latitude))
+        lon (make-single-coord ((metadata 0) :longitude))
+        ;; Create the times in days since 1/1/00
+        time (make-times data)
+        heights (make-heights data)]
 
+    (doto datafile
+    ;; Write the coordinate variable data. This will put the latitudes
+    ;; and longitudes of our data grid into the netCDF file.
+    ;;
+      (.create)
+      ;;
+      ;; Actually write the data to the file
+      ;;
+      (.write "latitude" lat)
+      (.write "longitude" lon)
+      (.write "time" time)
+      (.write "sea_surface_height_above_reference_level" heights)
+      (.close))
+    (println "SUCCESS!")))
+  
 (defn get-monthly-rlr-data [station_id]
   "Get the monthly RLR data and dates for a given id"
   (println station_id)
@@ -138,29 +156,6 @@
   (with-open [rdr (java.io.BufferedReader. (.getCharacterStream clob))]
     (apply str (line-seq rdr))))
 
-(defn write-data [data metadata datafile]
-  (let [;; Create the coordinate data
-        lat (make-single-coord ((metadata 0) :latitude))
-        lon (make-single-coord ((metadata 0) :longitude))
-        ;; Create the times in days since 1/1/00
-        time (make-times data)
-        heights (make-heights data)]
-
-    (doto datafile
-    ;; Write the coordinate variable data. This will put the latitudes
-    ;; and longitudes of our data grid into the netCDF file.
-    ;;
-      (.create)
-      ;;
-      ;; Actually write the data to the file
-      ;;
-      (.write "latitude" lat)
-      (.write "longitude" lon)
-      (.write "time" time)
-      (.write "sea_surface_height_above_reference_level" heights)
-      (.close))
-    (println "SUCCESS!")))
-
 (defn make-file [datafile id]
   "Adds data to a netcdf datafile"
   (let [data (get-monthly-rlr-data id)
@@ -190,8 +185,7 @@
              ;;referenced by lowercase clojure fields
              :naming {:keys clojure.string/lower-case
                       :fields clojure.string/upper-case}})
-  ;; Set up the entities for tables and relationships of interest
-  (set-entities)
+
   ;; Make a netcdf file for each station
   (let [station-ids (get-rlr-ids)
         ids (make-seq station-ids)]
