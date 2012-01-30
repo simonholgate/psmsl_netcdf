@@ -3,8 +3,7 @@
    (ucar.ma2 DataType ArrayFloat InvalidRangeException)
    (ucar.nc2 NetcdfFileWriteable Dimension)
    (java.util ArrayList)
-   (java.io IOException))
-  (:gen-class))
+   (java.io IOException)))
 
 (defn boilerplate [datafile]
   "Adds boilerplate features to the netcdf file"
