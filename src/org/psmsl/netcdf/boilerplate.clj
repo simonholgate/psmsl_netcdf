@@ -80,5 +80,9 @@
       (.addVariableAttribute "time" "standard_name" "time")
       (.addVariableAttribute "time" "long_name" "time")
       (.addVariableAttribute "time" "units" "days since 0000-01-01T00:00:00Z")
-      (.addVariableAttribute "time" "calendar" "gregorian"))
+      (.addVariableAttribute "time" "calendar" "gregorian")
+      ;;
+      (.addGlobalAttribute "Conventions" "CF-1.5, OceanSITES 1.2, TideGauge-0.1")
+      (.addGlobalAttribute "title" "Sea Level Time Series (MONTHLY)")
+      (.addGlobalAttribute "naming_authority" "OceanSITES"))
     datafile))                          

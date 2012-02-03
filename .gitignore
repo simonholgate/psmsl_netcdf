@@ -6,3 +6,5 @@
 /.lein-failures
 /checkouts
 /.lein-deps-sum
+dbase.properties
+/src/org/psmsl/netcdf/config.clj

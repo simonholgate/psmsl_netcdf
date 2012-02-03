@@ -3,6 +3,6 @@
             :main org.psmsl.netcdf.core
             :dependencies [[org.clojure/clojure "1.3.0"]
                            [netcdf/netcdfAll "4.2"]
-                           [korma "0.3.0-alpha13"]
+                           [korma "0.3.0-beta1"]
                            [oracleJDBC/classes12 "10.2.0"]
                            [clj-time "0.3.4"]])
