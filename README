@@ -1,15 +1,15 @@
 # psmsl_netcdf
 
 Produces netcdf files containing monthly mean sea levels from
-tne Revised Local Reference (RLR) stations of the Permanent
+the Revised Local Reference (RLR) stations of the Permanent
 Service for Mean Sea Level, Liverpool, UK.
 
 ## Usage
 
-Rename config.sample.clj to config.clj and add database connection details: user, password and 
-dbstring, where dbstring is of the form @dbname:port:sid.
+Rename config.sample.clj to config.clj and add database connection details: 
+user, password and dbstring, where dbstring is of the form @dbname:port:sid.
 
-Then load core and type (-main) in th repl.
+Load core.clj and type (-main) in the repl or type 'lein run' in the project directory.
 
 ## License
 
