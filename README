@@ -1,4 +1,3 @@
-
 # psmsl_netcdf
 
 Produces netcdf files containing monthly mean sea levels from
@@ -7,9 +6,10 @@ Service for Mean Sea Level, Liverpool, UK.
 
 ## Usage
 
-java -jar psmsl_netcdf-0.0.1-SNAPSHOT-standalone.jar user pass dbstring
+Rename config.sample.clj to config.clj and add database connection details: user, password and 
+dbstring, where dbstring is of the form @dbname:port:sid.
 
-where dbstring is of the form @dbname:port:sid
+Then load core and type (-main) in th repl.
 
 ## License
 
